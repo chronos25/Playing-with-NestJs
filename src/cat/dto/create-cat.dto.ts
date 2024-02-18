@@ -1,4 +1,4 @@
-import { IsString, IsNumber, isNotEmpty } from 'class-validator';
+import { IsString, IsNumber } from 'class-validator';
 
 export class CreateCatDto{
     @IsString()
