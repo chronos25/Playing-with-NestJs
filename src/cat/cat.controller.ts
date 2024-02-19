@@ -1,9 +1,14 @@
 import { Body, Controller, Get, HttpCode, HttpException, HttpStatus, Param, Post, Redirect, Req, Res, UsePipes, ValidationPipe } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { CreateCatDto } from './dto/create-cat.dto';
+import { Cat } from './interfaces/cat.interface';
+import { CatService } from './service/cat.service'
 
 @Controller('cat')
 export class CatController {
+
+    constructor(private catService: CatService) {}
+
     @Get('')
     @HttpCode(200)
    //@Redirect('http://localhost:3000/')
@@ -40,9 +45,14 @@ export class CatController {
     @Post()
     @HttpCode(201)
     @UsePipes(new ValidationPipe({ transform: true }))
-    async create(@Req() request: Request, @Res() res: Response, @Body() createCatDto: CreateCatDto) {
+    async create(
+                @Req() request: Request, 
+                @Res() res: Response, 
+                @Body() createCatDto: CreateCatDto
+                ) {
         try{ 
-            console.log("Will create cats here is the request body - ", request.body, "DTO ",createCatDto);
+            console.log("Will create cats using services", request.body, "DTO ",createCatDto);
+            this.catService.create(request.body);
             res.status(HttpStatus.CREATED).send('This action will create cat');
         } catch(error){
             throw new HttpException({
